@@ -1,3 +1,6 @@
+from django.utils.decorators import method_decorator
+from drf_yasg import openapi
+from drf_yasg.utils import swagger_auto_schema
 from rest_framework import viewsets
 from rest_framework.views import APIView, Response
 from rest_framework.pagination import PageNumberPagination
@@ -33,6 +36,22 @@ class ModelsViewSet(viewsets.ModelViewSet):
     serializer_class = ModelsSerializer
 
 
+@method_decorator(name='list', decorator=swagger_auto_schema(
+    manual_parameters=[
+        openapi.Parameter(
+            'mark', openapi.IN_QUERY,
+            description=("View cars with current mark"),
+            type=openapi.TYPE_STRING,
+            required=False
+        ),
+        openapi.Parameter(
+            'amount', openapi.IN_QUERY,
+            description=("Sort list by amount field (use amount=true)"),
+            type=openapi.TYPE_STRING,
+            required=False
+        ),
+    ]
+))
 class OrderViewSet(viewsets.ModelViewSet):
     """ CRUD для модели заказа """
 
